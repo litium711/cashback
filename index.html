@@ -20,7 +20,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 .hrow{display:flex;align-items:center}
 .xb{background:none;border:0;color:var(--mute);font-size:18px;padding:18px 8px 18px 16px}
 .nm{flex:1;font-weight:600;font-size:18px;padding:16px 16px 16px 6px}
-.arr{margin-left:auto;color:var(--mute);transition:transform .2s}
+.arr{margin-left:8px;color:var(--mute);transition:transform .2s}
 .bank.open .arr{transform:rotate(90deg)}
 .cbw{position:relative;margin:0 16px 8px}.cbc{display:block;width:100%;text-align:left;background:var(--soft);border:0;border-radius:12px;padding:10px 12px 10px 40px}.cx{position:absolute;top:6px;left:6px;width:28px;height:28px;border:0;border-radius:50%;background:none;color:var(--mute);font-size:13px}
 .cl{display:flex;justify-content:space-between;gap:8px;font-weight:600}
@@ -53,8 +53,10 @@ input[type=text]{font:inherit;padding:11px 12px;border-radius:12px;border:1px so
 .mdl,.dlg{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;z-index:10}
 .mdl{align-items:flex-end;justify-content:center}
 .dlg{align-items:center;justify-content:center;padding:24px;z-index:20}
-.mdl[hidden],.dlg.rev .add{flex-direction:row-reverse}
-.dlg[hidden]{display:none}
+.mdl[hidden],.dlg[hidden]{display:none}
+.dlg.rev .add{flex-direction:row-reverse}
+.dlg.rev #dok{background:none;border:1px solid var(--line);color:var(--ink)}
+.dlg.rev [data-a=dno]{background:var(--acc);border:0;color:var(--onacc)}
 .sheet{background:var(--card);width:100%;max-width:560px;max-height:92vh;overflow:auto;border-radius:20px 20px 0 0;padding:16px 16px calc(20px + env(safe-area-inset-bottom,0px))}
 .mh{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
 .mt{font-size:20px;font-weight:700}
@@ -90,7 +92,7 @@ var KEY="cashback-v1";
 var CATS=["Все покупки","Красота","Рестораны","Одежда","Продукты","Аптеки","Искусство","Фастфуд","Развлечения","Спорттовары","Дом и ремонт"];
 var EMO={"Красота":"💄","Рестораны":"🍽️","Одежда":"👗","Продукты":"🛒","Аптеки":"💊","Искусство":"🎨","Фастфуд":"🍔","Развлечения":"🎡","Спорттовары":"⚽","Дом и ремонт":"🛠️","Все покупки":"🛍️"};
 var PCT=[1,2,3,4,5,10];
-var BANKS=["Альфа","Т-Банк","Сбер","Пэй","ВТБ"];
+var BANKS=["Альфа","Т-Банк","Сбер","Яндекс Пэй","ВТБ"];
 var RULES=[
 ["аптек|медс|медиц|клиник|поликлин|врач|здоров|стомат|лекарств|фарм|анализ|лаборатор|оптик|очки","💊"],
 ["авиа|самол|перел[её]т|тр[еэ]вел|аэро","✈️"],
@@ -142,6 +144,10 @@ try{if(!localStorage.getItem(KEY+"-m2")){
   });
   save();localStorage.setItem(KEY+"-m2","1");
 }}catch(e){}
+try{if(!localStorage.getItem(KEY+"-m3")){
+  state.forEach(function(b){if(b.n==="Пэй")b.n="Яндекс Пэй"});
+  save();localStorage.setItem(KEY+"-m3","1");
+}}catch(e){}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}}
 function toast(t){var el=document.getElementById("toast");el.textContent=t;el.classList.add("show");clearTimeout(toast.t);toast.t=setTimeout(function(){el.classList.remove("show")},1500)}
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
@@ -175,7 +181,7 @@ function render(){
       var t=info(c).join(" • ");
       h+='<div class="cbw"><button class="cx" aria-label="Сбросить кэшбэк" data-a="unset" data-b="'+i+'" data-c="'+j+'">✕</button><button class="cbc" data-a="edit" data-b="'+i+'" data-c="'+j+'"><span class="cl"><span>'+em(c)+' '+esc(c.n)+'</span><b>'+fp(c.p)+'%</b></span>'+(t?'<span class="tags">'+t+'</span>':'')+'</button></div>';
     });
-    h+='<button class="sr" data-a="open" data-b="'+i+'">Выбор категории<span class="arr">›</span></button><div class="body"><input type="text" class="srch" data-s="'+i+'" placeholder="Поиск по названию" autocomplete="off"><div class="grid">';
+    h+='<button class="sr" data-a="open" data-b="'+i+'">Категории<span class="arr">›</span></button><div class="body"><input type="text" class="srch" data-s="'+i+'" placeholder="Поиск по названию" autocomplete="off"><div class="grid">';
     b.c.forEach(function(c,j){
       if(c.on)return;
       h+='<div class="bw" data-nm="'+esc(c.n.toLowerCase())+'"><button class="bub" data-a="edit" data-b="'+i+'" data-c="'+j+'"><span class="em">'+em(c)+'</span><span>'+esc(c.n)+'</span></button><button class="bx" aria-label="Удалить категорию" data-a="delcat" data-b="'+i+'" data-c="'+j+'">✕</button></div>';
