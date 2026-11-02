@@ -8,9 +8,9 @@
 <meta name="theme-color" content="#eef0f6">
 <title>Кэшбэк</title>
 <style>
-:root{--bg:#eef0f6;--card:#fff;--ink:#191c2b;--mute:#6b7089;--line:#dfe2ee;--acc:#3b3fe0;--onacc:#fff;--danger:#d23b3b;--soft:#e8e9fb;
+:root{--bg:#eef0f6;--card:#fff;--ink:#191c2b;--mute:#6b7089;--line:#dfe2ee;--acc:#3b3fe0;--onacc:#fff;--danger:#d23b3b;--del:#c0605f;--soft:#e8e9fb;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141625;--card:#1e2135;--ink:#eceefc;--mute:#9a9fc0;--line:#2d3150;--acc:#8a8dff;--onacc:#12132a;--danger:#ff7b7b;--soft:#2a2e52}}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141625;--card:#1e2135;--ink:#eceefc;--mute:#9a9fc0;--line:#2d3150;--acc:#8a8dff;--onacc:#12132a;--danger:#ff7b7b;--del:#94505a;--soft:#2a2e52}}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 -apple-system,"SF Pro Text","Helvetica Neue",Arial,sans-serif}
 main{max-width:560px;margin:0 auto;padding:20px 16px 40px}
@@ -66,16 +66,33 @@ input[type=text]{font:inherit;padding:11px 12px;border-radius:12px;border:1px so
 .hb svg{width:20px;height:20px;display:block}
 .bd{display:inline-flex;align-items:center;line-height:0;margin-left:6px;opacity:.55}.bd svg{width:15px;height:15px;display:block}
 .ydx{margin-top:14px}.ydx[hidden]{display:none}.ydx p{margin:0;font-weight:600}.ydx ul{margin:6px 0 0;padding-left:20px}
+.lchk{-webkit-appearance:none;appearance:none;flex:none;display:grid;place-content:center;width:22px;height:22px;margin:0;border:2px solid var(--mute);border-radius:50%;background:none}
+.lchk:checked{border-color:var(--acc)}
+.lchk:checked::after{content:"";width:10px;height:10px;border-radius:50%;background:var(--acc)}
+.lrow{display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--soft);touch-action:pan-y;position:relative}
+.lw{position:relative;overflow:hidden}
+.lw+.lw,.lw+.lnew{border-top:1px solid var(--line)}
+.ldel{position:absolute;top:0;right:0;bottom:0;width:88px;display:flex;align-items:center;justify-content:center;border:0;background:var(--del);color:#fff;font-weight:600;font-size:15px}
+.lrow .lt{flex:1}
+.lrow input[type=text]{flex:1;min-width:0;border:0;background:none;border-radius:0;padding:6px 0}
+.lrow .lv{flex:.7;text-align:right}
+.lnew{display:flex;align-items:center;gap:12px;width:100%;padding:14px;background:none;border-left:0;border-right:0;border-bottom:0;color:var(--mute);text-align:left}
+.pl{display:flex;align-items:center;justify-content:center;width:22px;height:22px;border:2px dashed var(--line);border-radius:50%}
+.pl svg{width:10px;height:10px;display:block}
+.hint[hidden]{display:none}
+.tip{display:flex;align-items:flex-start;gap:8px}.tip .ti{flex:none;margin-top:1px}.tip .ti svg{width:16px;height:16px;display:block}
+.hint{margin-top:10px;color:var(--mute);font-size:13px}
+.ntf{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));right:12px;width:calc(100% - 24px);max-width:360px;display:flex;align-items:flex-start;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:14px 14px 14px 16px;box-shadow:0 8px 28px rgba(0,0,0,.25);z-index:40}
+.ntf[hidden]{display:none}
+.ni{flex:none;color:var(--mute);margin-top:1px}.ni svg{width:24px;height:24px;display:block}
+.nb{flex:1;min-width:0}.nt{margin:0;font-weight:700;font-size:17px}.ns:empty{display:none}.ns{margin:2px 0 0;color:var(--mute);font-size:15px}
 .msub{color:var(--mute);margin:0 0 4px}
-.lim{background:var(--soft);border-radius:14px;margin-top:10px}
+.lim{background:var(--soft);border-radius:14px;margin-top:10px;overflow:hidden}
 .li{display:flex;align-items:center;gap:12px;padding:14px;cursor:pointer}
 .li .lt{flex:1}
 .li+.li{border-top:1px solid var(--line)}
 .li b{color:var(--acc);text-align:right}
-.lrow{display:flex;gap:6px;margin-top:8px;align-items:center}
 #dcn[hidden]{display:none}
-.lrow .lt{flex:1}
-.lrow input{flex:1;min-width:0}.lrow .lchk{flex:none;width:22px}.lrow .lv{flex:.8}
 .res{margin-top:16px;padding:14px;border-radius:12px;background:var(--soft);font-weight:600;opacity:.45}
 .res.on{opacity:1}
 .mh{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
@@ -109,6 +126,7 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--acc);outline-of
 <div class="mdl" id="mdl" hidden></div>
 <div class="dlg" id="dlg" hidden><div class="box"><div class="mh"><span class="mt" id="dt"></span><button class="x" aria-label="Закрыть" data-a="dno"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div><p class="ds" id="ds"></p><div class="add"><button class="btn grow" id="dok" data-a="dyes">Удалить</button><button class="btn ghost grow" id="dcn" data-a="dno">Отмена</button></div></div></div>
 <div class="toast" id="toast"></div>
+<div class="ntf" id="ntf" hidden><span class="ni"><svg viewBox="0 0 24 24"><path d="M12 3.2 22 20.5H2z" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 10v4.6M12 17.4h.01" stroke="var(--card)" stroke-width="2.2" stroke-linecap="round" fill="none"/></svg></span><div class="nb"><p class="nt" id="nt"></p><p class="ns" id="ns"></p></div><button class="x" aria-label="Закрыть" data-a="nclose"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
 <script>
 var KEY="cashback-v1";
 var CATS=["Все покупки","Красота","Рестораны","Одежда","Продукты","Аптеки","Искусство","Фастфуд","Развлечения","Спорттовары","Дом и ремонт"];
@@ -116,12 +134,13 @@ var EMO={"Красота":"💄","Рестораны":"🍽️","Одежда":"
 var PCT=[1,2,3,4,5,10];
 var BANKS=["Альфа","Т-Банк","Сбер","Яндекс Пэй","ВТБ"];
 var IC='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11.5V16M12 8h.01" stroke-width="2.4"/></svg>';
+var PL='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>';
 var XI='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>';
 var CALC='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2.5" width="14" height="19" rx="2.5"/><rect x="8" y="5.5" width="8" height="3.5" rx=".8"/><path d="M8.5 13h.01M12 13h.01M15.5 13h.01M8.5 16.5h.01M12 16.5h.01M15.5 16.5h.01"/></svg>';
 var LIM={
 "Альфа":{items:[["Без подписки","5000₽"],["С «Альфа-Смарт»","7000₽"],["С Alfa Only","30\u00a0000₽"],["Карта для детей","2000₽"]]},
 "Т-Банк":{items:[["Без подписки","3000₽"],["С PRO","5000₽"],["С Premium","30\u00a0000₽"],["Карта для детей","2000 бонусов"]]},
-"Сбер":{items:[["Без подписки","2000 бонусов"],["С «СберПрайм»","10\u00a0000 бонусов"],["С «СберПрайм+»","15\u00a0000 бонусов"],["Карта для детей","1000 бонусов"]]},
+"Сбер":{items:[["Без подписки","2000 бонусов"],["Со «СберПрайм»","10\u00a0000 бонусов"],["Со «СберПрайм+»","15\u00a0000 бонусов"],["Карта для детей","1000 бонусов"]]},
 "Яндекс Пэй":{ydx:1,items:[]},
 "ВТБ":{items:[["Без подписки","3000₽"],["С «Привилегией»","30\u00a0000₽"]]}
 };
@@ -182,6 +201,10 @@ try{if(!localStorage.getItem(KEY+"-m3")){
   state.forEach(function(b){if(b.n==="Пэй")b.n="Яндекс Пэй"});
   save();localStorage.setItem(KEY+"-m3","1");
 }}catch(e){}
+try{if(!localStorage.getItem(KEY+"-m4")){
+  state.forEach(function(b){var a=Array.isArray(b.sel)?b.sel:(b.sel?[b.sel]:[]);a.forEach(function(x){if(x&&x.l)x.l=x.l.replace(/^С «СберПрайм/,"Со «СберПрайм")})});
+  save();localStorage.setItem(KEY+"-m4","1");
+}}catch(e){}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}}
 function toast(t){var el=document.getElementById("toast");el.textContent=t;el.classList.add("show");clearTimeout(toast.t);toast.t=setTimeout(function(){el.classList.remove("show")},1500)}
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
@@ -219,7 +242,13 @@ function info(c){
   return a;
 }
 function ask(t,s,fn,ok,rev){pending=fn;$("dlg").classList.toggle("rev",!!rev);$("dt").textContent=t;$("ds").textContent=s||"";$("dok").textContent=ok||"Удалить";$("dcn").hidden=false;$("dlg").hidden=false}
-function notice(t,s){pending=null;$("dlg").classList.remove("rev");$("dt").textContent=t;$("ds").textContent=s;$("dok").textContent="Понятно";$("dcn").hidden=true;$("dlg").hidden=false}
+function banner(t,m){$("nt").textContent=t;$("ns").textContent=m||"";$("ntf").hidden=false;clearTimeout(banner.t);banner.t=setTimeout(function(){$("ntf").hidden=true},6000)}
+function persistRows(){
+  if(!M||M.b==null||!$("lrows"))return;
+  var lim=[];
+  Array.prototype.forEach.call(document.querySelectorAll("#lrows .lrow"),function(r){var nn=r.querySelector(".ln"),o={l:nn?nn.value.trim():"Без подписки",v:normAmt(r.querySelector(".lv").value)};if(nn&&!o.l&&!o.v)return;lim.push(o)});
+  state[M.b].lim=lim;save();
+}
 function render(){
   var h="";
   state.forEach(function(b,i){
@@ -238,6 +267,13 @@ function render(){
   });
   $("app").innerHTML=h||'<p style="color:var(--mute)">Банков пока нет<br>Добавьте первый ниже</p>';
 }
+function syncHint(){
+  var h=$("mhint");if(!h)return;
+  var p=num("mp"),c=num("mcap");
+  if(!(p>0)||!(c>0)){h.hidden=true;return}
+  $("mhtxt").textContent="Посчитали за вас. Вы получите макс. кэшбэк за покупку на "+f(Math.round(c*100/p*100)/100)+"₽, но не больше";
+  h.hidden=false;
+}
 function syncChips(){
   var x=parseFloat($("mp").value.replace(",","."));
   document.querySelectorAll("#mdl .chip").forEach(function(c){c.classList.toggle("on",+c.dataset.v===x)});
@@ -250,10 +286,10 @@ function openM(b,c){
   h+='<div class="lbl">Процент кэшбэка</div><div class="chips">'+PCT.map(function(p){return'<button class="chip" data-a="mpct" data-v="'+p+'">'+p+'%</button>'}).join("")+'</div>';
   h+='<input type="text" id="mp" placeholder="Ввести свой %" inputmode="decimal" autocomplete="off" style="margin-top:8px" value="'+(o.on?fp(o.p):"")+'">';
   h+='<div class="lbl">Сумма покупки</div><div class="two">от <input type="text" id="mmin" inputmode="decimal" autocomplete="off" value="'+v(o.min)+'"> до <input type="text" id="mmax" inputmode="decimal" autocomplete="off" value="'+v(o.max)+'"> ₽</div>';
-  h+='<div class="lbl">Макс. кэшбэк</div><div class="two"><input type="text" id="mcap" inputmode="decimal" autocomplete="off" value="'+v(o.cap)+'"> ₽</div>';
+  h+='<div class="lbl">Макс. кэшбэк</div><div class="two"><input type="text" id="mcap" inputmode="decimal" autocomplete="off" value="'+v(o.cap)+'"></div><div class="hint tip" id="mhint" hidden><span class="ti">'+IC+'</span><span id="mhtxt"></span></div>';
   h+='<label class="chk"><input type="checkbox" id="mon"'+(o.online?" checked":"")+'> Покупки только онлайн</label><label class="chk"><input type="checkbox" id="moff"'+(o.offline?" checked":"")+'> Покупки только офлайн</label>';
   h+='<button class="btn full" data-a="msave">Сохранить</button>';
-  $("mdl").innerHTML=h+'</div>';$("mdl").hidden=false;syncChips();
+  $("mdl").innerHTML=h+'</div>';$("mdl").hidden=false;syncChips();syncHint();
 }
 function sheet(t){return'<div class="sheet"><div class="mh"><span class="mt">'+t+'</span><button class="x" aria-label="Закрыть" data-a="mclose">'+XI+'</button></div>'}
 function normAmt(v){
@@ -263,18 +299,21 @@ function normAmt(v){
   var n=parseFloat(m[1].replace(/[\s\u00a0]/g,"").replace(",","."));
   return isNaN(n)?v:f(n)+"₽";
 }
-function lrow(l,v,c,fx){return'<div class="lrow"><input type="checkbox" class="lchk" aria-label="Выбрать"'+(c?" checked":"")+'>'+(fx?'<span class="lt">Без подписки</span>':'<input type="text" class="ln" placeholder="Название подписки" value="'+esc(l||"")+'">')+'<input type="text" class="lv" placeholder="Сумма лимита" value="'+esc(v||"")+'">'+(fx?'':'<button class="x" aria-label="Убрать подписку" data-a="lrm">'+XI+'</button>')+'</div>'}
+function lrow(l,v,c,fx){return'<div class="lw"'+(fx?'':' data-del="1"')+'>'+(fx?'':'<button class="ldel" data-a="lrm">Удалить</button>')+'<div class="lrow"><input type="checkbox" class="lchk" aria-label="Выбрать"'+(c?" checked":"")+'>'+(fx?'<span class="lt">Без подписки</span>':'<input type="text" class="ln" placeholder="Название" value="'+esc(l||"")+'">')+'<input type="text" class="lv" placeholder="Сумма лимита" value="'+esc(v||"")+'"></div></div>'}
 function isSel(bk,l,v){return selArr(bk).some(function(x){return x.l===l&&x.v===v})}
+var BTN='<button class="btn full" data-a="lchoose">Выбрать</button><button class="btn ghost full" style="margin-top:10px" data-a="lreset">Сбросить</button>';
 function openLimit(b){
   var bk=state[b],L=LIM[bk.n],h=sheet("Лимит кэшбэка в «"+esc(qn(bk.n))+"»");
   if(L&&L.ydx){
     var on=selArr(bk).length>0;
-    h+='<div class="lim"><label class="li"><input type="checkbox" class="lchk" id="ydxc"'+(on?" checked":"")+'><span class="lt">Есть подписка «Яндекс Плюс»</span></label></div><div class="ydx" id="ydx"'+(on?"":" hidden")+'><p>Общий лимит кэшбэка — 20\u00a0000 баллов:</p><ul><li>10\u00a0000 за покупки картой офлайн и через NFC</li><li>10\u00a0000 за покупки с помощью QR, «Сплита» и прочего</li></ul></div><button class="btn full" data-a="lchoose">Выбрать</button>';
+    h+='<div class="lim"><label class="li"><input type="checkbox" class="lchk" id="ydxc"'+(on?" checked":"")+'><span class="lt">Есть подписка «Яндекс Плюс»</span></label></div><div class="ydx" id="ydx"'+(on?"":" hidden")+'><p>Общий лимит — 20\u00a0000 баллов:</p><ul><li>10\u00a0000 за покупки картой офлайн и через NFC.</li><li>10\u00a0000 за покупки с помощью QR, «Сплита» и прочего.</li></ul></div>'+BTN;
   }
-  else if(L){h+='<div class="lim">'+L.items.map(function(r,k){return'<label class="li"><input type="checkbox" class="lchk" data-i="'+k+'"'+(isSel(bk,r[0],r[1])?" checked":"")+'><span class="lt">'+esc(r[0])+'</span><b>'+esc(r[1])+'</b></label>'}).join("")+'</div><button class="btn full" data-a="lchoose">Выбрать</button>'}
+  else if(L){h+='<div class="lim">'+L.items.map(function(r,k){return'<label class="li"><input type="checkbox" class="lchk" data-i="'+k+'"'+(isSel(bk,r[0],r[1])?" checked":"")+'><span class="lt">'+esc(r[0])+'</span><b>'+esc(r[1])+'</b></label>'}).join("")+'</div>'+BTN}
   else{
     var all=bk.lim||[],fx=all.filter(function(r){return r.l==="Без подписки"})[0],oth=all.filter(function(r){return r.l!=="Без подписки"}),fv=fx?fx.v:"";
-    h+='<div id="lrows">'+lrow("Без подписки",fv,isSel(bk,"Без подписки",fv),true)+oth.map(function(r){return lrow(r.l,r.v,isSel(bk,r.l,r.v))}).join("")+'</div><button class="btn ghost full" style="margin-top:12px" data-a="ladd">Добавить подписку</button><button class="btn full" style="margin-top:12px" data-a="lchoose">Выбрать</button>';
+    var rows=lrow("Без подписки",fv,isSel(bk,"Без подписки",fv),true)+oth.map(function(r){return lrow(r.l,r.v,isSel(bk,r.l,r.v))}).join("");
+    if(!oth.length)rows+=lrow("","",false);
+    h+='<div class="lim" id="lrows">'+rows+'<button class="lnew" data-a="ladd"><span class="pl">'+PL+'</span>Добавить подписку</button></div><div class="hint">Смахните влево, чтобы удалить подписку</div><button class="btn full" style="margin-top:16px" data-a="lchoose">Выбрать</button><button class="btn ghost full" style="margin-top:10px" data-a="lreset">Сбросить</button>';
   }
   M={b:b};$("mdl").innerHTML=h+'</div>';$("mdl").hidden=false;
 }
@@ -283,7 +322,7 @@ function openCalc(){
   $("mdl").innerHTML=sheet("Рассчитать кэшбэк")+'<input type="text" id="ca" inputmode="decimal" placeholder="Сумма покупки" autocomplete="off"><input type="text" id="cb" inputmode="decimal" placeholder="Процент кэшбэка" autocomplete="off" style="margin-top:10px"><div class="res" id="cr">Вы получите: <span id="cv">0</span>₽</div><button class="btn full" data-a="ccalc">Рассчитать</button><button class="btn ghost full" style="margin-top:10px" data-a="creset">Сбросить</button></div>';
   $("mdl").hidden=false;
 }
-function closeM(){$("mdl").hidden=true;$("mdl").innerHTML="";M=null}
+function closeM(){$("ntf").hidden=true;$("mdl").hidden=true;$("mdl").innerHTML="";M=null}
 document.addEventListener("click",function(e){
   if(e.target.id==="mdl"){closeM();return}
   if(e.target.id==="dlg"){pending=null;$("dlg").hidden=true;return}
@@ -292,23 +331,30 @@ document.addEventListener("click",function(e){
   if(e.target.id==="dlg"){pending=null;$("dlg").hidden=true;return}
   if(a==="lim"){openLimit(b);return}
   if(a==="calc"){openCalc();return}
-  if(a==="ladd"){$("lrows").insertAdjacentHTML("beforeend",lrow());return}
+  if(a==="lrm"){t.closest(".lw").remove();persistRows();return}
+  if(a==="ladd"){t.insertAdjacentHTML("beforebegin",lrow());var ns=document.querySelectorAll("#lrows .ln");ns[ns.length-1].focus();return}
+  if(a==="lreset"){Array.prototype.forEach.call(document.querySelectorAll("#mdl .lchk"),function(x){x.checked=false});if($("ydx"))$("ydx").hidden=true;state[M.b].sel=[];save();render();return}
+  if(a==="nclose"){$("ntf").hidden=true;return}
   if(a==="lrm"){t.closest(".lrow").remove();return}
   if(a==="lchoose"){
-    var lb=state[M.b],LL=LIM[lb.n],lim=[],sel=[],bad=false;
+    var lb=state[M.b],LL=LIM[lb.n],sel=[];
     if(LL&&LL.ydx){sel=$("ydxc").checked?[{l:"Есть подписка «Яндекс Плюс»",v:"20\u00a0000"}]:[]}
     else if(LL){
       sel=Array.prototype.filter.call(document.querySelectorAll("#mdl .lchk"),function(x){return x.checked}).map(function(x){var r=LL.items[+x.dataset.i];return{l:r[0],v:r[1]}});
     }else{
-      Array.prototype.forEach.call(document.querySelectorAll("#lrows .lrow"),function(r,k){
-        var nn=r.querySelector(".ln"),o={l:nn?nn.value.trim():"Без подписки",v:normAmt(r.querySelector(".lv").value)};
-        if(nn&&(!o.l||!o.v))bad=true;
-        if(r.querySelector(".lchk").checked){if(!o.v)bad=true;sel=[o]}
-        lim.push(o);
-      });
-      if(bad){notice("Невозможно сохранить","Проверьте, ввели ли вы название подписки и сумму лимита");return}
-      lb.lim=lim;
+      var ck=null;
+      Array.prototype.forEach.call(document.querySelectorAll("#lrows .lrow"),function(r){if(r.querySelector(".lchk").checked)ck=r});
+      if(ck){
+        var nn=ck.querySelector(".ln"),o={l:nn?nn.value.trim():"Без подписки",v:normAmt(ck.querySelector(".lv").value)},dg=/\d/.test(o.v),msg=null;
+        if(nn&&!o.l&&(!o.v||dg))msg=["Введите название подписки"];
+        else if(o.v&&!dg)msg=["Введите число","Лимит не может состоять только из букв"];
+        else if(!o.v)msg=["Укажите сумму лимита"];
+        if(msg){banner(msg[0],msg[1]);return}
+        sel=[o];
+      }
+      persistRows();
     }
+    if(!sel.length){banner("Вы ничего не выбрали","Выберите лимит или нажмите на крестик");return}
     lb.sel=sel;save();closeM();render();return}
   if(a==="ccalc"){
     var ca=num("ca"),cb=num("cb");
@@ -321,7 +367,7 @@ document.addEventListener("click",function(e){
   if(a==="edit"){openM(b,c);return}
   if(a==="new"){openM(b,-1);return}
   if(a==="mclose"){closeM();return}
-  if(a==="mpct"){$("mp").value=t.dataset.v;syncChips();return}
+  if(a==="mpct"){$("mp").value=t.dataset.v;syncChips();syncHint();return}
   if(a==="msave"){
     var p=parseFloat($("mp").value.replace(",","."));
     if(!(p>0)){toast("Укажите процент");return}
@@ -343,7 +389,7 @@ document.addEventListener("click",function(e){
     open[M.b]=true;save();closeM();render();toast("Сохранено");return}
   if(a==="unset"){clr(state[b].c[c]);save();render();return}
   if(a==="delcat"){ask("Удалить категорию?","Вы сможете вернуть ее вручную или по кнопке «Сбросить кэшбэк»",function(){state[b].c.splice(c,1);save();render()},null,true);return}
-  if(a==="delbank"){ask("Удалить этот банк?",state[b].n,function(){state.splice(b,1);open={};save();render()});return}
+  if(a==="delbank"){ask("Удалить банк «"+qn(state[b].n)+"»?","Если передумаете, то можете добавить банк вручную",function(){state.splice(b,1);open={};save();render()},null,true);return}
   if(a==="addbank"){
     var i=$("newBank"),nv=i.value.trim();
     if(!nv){toast("Введите название банка");return}
@@ -355,6 +401,8 @@ document.addEventListener("click",function(e){
 document.addEventListener("input",function(e){
   var t=e.target;
   if(t.id==="mp")syncChips();
+  if(t.id==="mp"||t.id==="mcap")syncHint();
+  if(t.closest&&t.closest("#lrows"))persistRows();
   if(t.dataset&&t.dataset.s!=null){
     var q=t.value.trim().toLowerCase();
     t.closest(".bank").querySelectorAll(".bw[data-nm]").forEach(function(el){el.hidden=!(q===""||el.dataset.nm.indexOf(q)>=0)});
@@ -371,6 +419,22 @@ document.addEventListener("change",function(e){
   document.addEventListener("touchstart",function(e){sh=e.target.closest(".sheet,.box");if(!sh)return;y0=e.touches[0].clientY;dy=0;sh.style.transition="none"},{passive:true});
   document.addEventListener("touchmove",function(e){if(!sh)return;var d=e.touches[0].clientY-y0;if(d>0&&sh.scrollTop<=0){dy=d;sh.style.transform="translateY("+d+"px)"}else if(d<=0&&dy>0){dy=0;sh.style.transform=""}},{passive:true});
   document.addEventListener("touchend",function(){if(!sh)return;var x=sh;sh=null;x.style.transition="";x.style.transform="";if(dy>110){if(x.closest("#dlg")){pending=null;$("dlg").hidden=true}else closeM()}dy=0});
+})();
+(function(){
+  var row=null,x0=0,y0=0,base=0,dx=0,opened=null;
+  function shut(r){if(r){r.style.transition="transform .15s";r.style.transform=""}if(opened===r)opened=null}
+  document.addEventListener("pointerdown",function(e){
+    var tg=e.target,w=tg.closest&&tg.closest(".lw[data-del]"),onDel=tg.closest&&tg.closest(".ldel");
+    if(opened&&!onDel&&(!w||w.querySelector(".lrow")!==opened))shut(opened);
+    if(!w||onDel)return;
+    if(e.pointerType==="mouse"&&tg.closest("input"))return;
+    row=w.querySelector(".lrow");base=row===opened?-88:0;dx=base;x0=e.clientX;y0=e.clientY;row.style.transition="none"});
+  document.addEventListener("pointermove",function(e){
+    if(!row)return;var d=e.clientX-x0;
+    if(Math.abs(e.clientY-y0)>Math.abs(d)+6){row.style.transform=base?"translateX(-88px)":"";row=null;return}
+    dx=Math.max(-88,Math.min(0,base+d));row.style.transform="translateX("+dx+"px)"});
+  function end(){if(!row)return;var r=row;row=null;r.style.transition="transform .15s";if(dx<-44){r.style.transform="translateX(-88px)";opened=r}else{r.style.transform="";if(opened===r)opened=null}}
+  document.addEventListener("pointerup",end);document.addEventListener("pointercancel",end);
 })();
 render();
 </script>
